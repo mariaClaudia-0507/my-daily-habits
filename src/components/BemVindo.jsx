@@ -1,7 +1,7 @@
 const BemVindo = ({ nomeUsuario, totalHabitos }) => {
   const nomeFormatado = nomeUsuario.toUpperCase();
   const mensagem = totalHabitos > 0
-    ?  'Você tem ${totalHabitos} hábito(s) cadastrado(s).'
+    ? `Você tem ${totalHabitos} hábito(s) cadastrado(s).` 
     : "Nenhum hábito cadastrado ainda. Que tal começar?";
 
   return (

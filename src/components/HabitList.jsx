@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef  } from 'react'
 import HabitCard from './HabitCard'
 
   function HabitList({habits, setHabits}) {
@@ -7,13 +7,42 @@ import HabitCard from './HabitCard'
   const [novaDescricao, setNovaDescricao] = useState('')
   const [novaCategoria, setNovaCategoria] = useState('')
 
-  const adicionarHabit = (event) => {
-    event.preventDefault()
+ const [erroNome, setErroNome] = useState('')
 
-    if (!novoNome.trim()) {
-      alert('Informe um nome para o hábito.')
-      return
+ const nomeInputRef = useRef(null)
+
+ const handleChange = (e) => {
+  const { name, value } = e.target
+ 
+
+  if (name === 'novoNome') {
+    setNovoNome(value)
+    // Valida comprimento mínimo em tempo real
+    if (value.length > 0 && value.length < 3) {
+      setErroNome('O nome deve ter pelo menos 3 caracteres.')
+    } else {
+      setErroNome('')
     }
+  }
+  if (name === 'novaDescricao') setNovaDescricao(value)
+  if (name === 'novaCategoria') setNovaCategoria(value)
+}
+
+const adicionarHabit = (event) => {
+  event.preventDefault()
+
+  if (!novoNome.trim()) {
+    alert('Informe um nome para o hábito.')
+    return
+  }
+
+  // Bloqueia se há erro de validação
+  if (erroNome) {
+    nomeInputRef.current?.focus()
+    return
+  }
+
+
 
     const novoHabit = {
       id: Date.now(),
@@ -24,12 +53,16 @@ import HabitCard from './HabitCard'
       diasFeitos: 0,
       categoria: novaCategoria || 'Geral',
     }
-
-    setHabits([...habits, novoHabit])
+    
+    setHabits(prev => [...prev, novoHabit])
+   
 
     setNovoNome('')
     setNovaDescricao('')
     setNovaCategoria('')
+
+    nomeInputRef.current?.focus()
+
   }
 
   const removerHabit = (id) => {
@@ -39,21 +72,26 @@ import HabitCard from './HabitCard'
   return (
     <section>
       <form onSubmit={adicionarHabit} className="habit-form">
+      <div>
         <label>
           Nome do hábito *
           <input
             type="text"
+            name="novoNome"
             value={novoNome}
-            onChange={(e) => setNovoNome(e.target.value)}
+            onChange={handleChange}
+            ref={nomeInputRef}
           />
         </label>
-
+         {erroNome && <p style={{ color: 'red', fontSize: '0.8rem' }}>{erroNome}</p>}
+      </div>
         <label>
           Descrição
           <input
             type="text"
+            name="novaDescricao"
             value={novaDescricao}
-            onChange={(e) => setNovaDescricao(e.target.value)}
+            onChange={handleChange}
           />
         </label>
 
@@ -61,8 +99,9 @@ import HabitCard from './HabitCard'
           Categoria
           <input
             type="text"
+            name="novaCategoria"
             value={novaCategoria}
-            onChange={(e) => setNovaCategoria(e.target.value)}
+            onChange={handleChange}
           />
         </label>
 

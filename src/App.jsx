@@ -4,7 +4,7 @@ import Footer    from './components/Footer';
 import BemVindo from './components/BemVindo';
 import SecaoHabitos from './components/SecaoHabitos';
 import HabitList from './components/HabitList';
-import { useState, useEffect } from 'react'
+import { useState, useEffect} from 'react'
 
 function App() {
 

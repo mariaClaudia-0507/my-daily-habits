@@ -128,3 +128,14 @@ ul {
   background-color: #413f3f;
 }
 
+.btn-primario{
+ background-color: #417464;
+ color: white; 
+ padding: 4px 12px;
+border-radius: 6px;
+}
+
+.btn-primario:hover {
+  background-color: #62937d;
+}
+
